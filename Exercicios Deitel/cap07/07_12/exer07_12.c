@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include <time.h>
 #define TAMANHO_MAO 5
+#define NUMERO_FACES 13
+#define NUMERO_NAIPES 4
 
 // prototipos
 void embaralha(int[][13]);
@@ -19,6 +21,7 @@ void verificaUmPar(int mao[], const char *face[]);
 void verificaDoisPares(int mao[], const char *face[]);
 void imprimeCoordenadaMao(int mao[]);
 void verificaUmaTrinca(int mao[], const char *face[]);
+void verificaQuadra(int mao[], const char *face[]);
 
 int main(void)
 {
@@ -39,8 +42,8 @@ int main(void)
     embaralha(baralho);
     
     distribui(baralho, naipe, face, mao);
-    int maoTeste[10] = {12, 1, 12, 0, 1, 3, 1, 2, 1, 1}; // mao inicalizada manualmente para testes
-    verificaDoisPares(maoTeste, face);
+    int maoTeste[10] = {12, 1, 12, 0, 12, 3, 2, 2, 1, 1}; // mao inicalizada manualmente para testes
+    verificaQuadra(maoTeste, face);
     imprimeCoordenadaMao(maoTeste);
     
 }
@@ -169,6 +172,31 @@ void verificaUmaTrinca(int mao[], const char *face[])
         }
     }
 }
+
+//d
+// IDEIA: COLOCAR UM CONTADOR DE 0 A 13 QUE CONTE QUANTAS OCORRENCIAS NA MAO TEM DE UM NUMERO ENTRE 0 E 12, SE CHEGAR EM 4 A FUNÇAO RETORNA 
+void verificaQuadra(int mao[], const char *face[])
+{
+    int faceEscolhida;
+    int indiceMao;
+    int contadorFace;
+    for(faceEscolhida = 0; faceEscolhida < NUMERO_FACES; faceEscolhida++)
+    {
+        contadorFace = 0;
+        for(indiceMao = 0; indiceMao < TAMANHO_MAO * 2; indiceMao = indiceMao += 2)
+        {
+            if(faceEscolhida == mao[indiceMao])
+                contadorFace++;
+            
+            if(contadorFace == 4)
+            {
+                printf("Quadra achada: %s\n", face[faceEscolhida]);
+                return;
+            }
+        }
+    } 
+}
+
 
 void imprimeCoordenadaMao(int mao[])
 {
