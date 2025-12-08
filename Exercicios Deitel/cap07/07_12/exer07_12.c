@@ -22,6 +22,7 @@ void verificaDoisPares(int mao[], const char *face[]);
 void imprimeCoordenadaMao(int mao[]);
 void verificaUmaTrinca(int mao[], const char *face[]);
 void verificaQuadra(int mao[], const char *face[]);
+void verificaFlush(int mao[], const char *naipe[]);
 
 int main(void)
 {
@@ -42,8 +43,8 @@ int main(void)
     embaralha(baralho);
     
     distribui(baralho, naipe, face, mao);
-    int maoTeste[10] = {12, 1, 12, 0, 12, 3, 2, 2, 1, 1}; // mao inicalizada manualmente para testes
-    verificaQuadra(maoTeste, face);
+    int maoTeste[10] = {12, 3, 12, 3, 12, 3, 12, 3, 12, 3}; // mao inicalizada manualmente para testes
+    verificaFlush(maoTeste, naipe);
     imprimeCoordenadaMao(maoTeste);
     
 }
@@ -174,12 +175,13 @@ void verificaUmaTrinca(int mao[], const char *face[])
 }
 
 //d
-// IDEIA: COLOCAR UM CONTADOR DE 0 A 13 QUE CONTE QUANTAS OCORRENCIAS NA MAO TEM DE UM NUMERO ENTRE 0 E 12, SE CHEGAR EM 4 A FUNÇAO RETORNA 
+// verifica se há uma quadra na mao
 void verificaQuadra(int mao[], const char *face[])
 {
-    int faceEscolhida;
-    int indiceMao;
-    int contadorFace;
+    int faceEscolhida; // a cada iteraçao representa uma face diferente
+    int indiceMao; // armazena o indice a ser comparado na mao
+    int contadorFace; // conta o numero de faces iguais encontradas
+    
     for(faceEscolhida = 0; faceEscolhida < NUMERO_FACES; faceEscolhida++)
     {
         contadorFace = 0;
@@ -197,6 +199,30 @@ void verificaQuadra(int mao[], const char *face[])
     } 
 }
 
+//d
+// verifica se há um flush na mao
+void verificaFlush(int mao[], const char *naipe[])
+{
+    int naipeEscolhido; // a cada iteraçao representa um naipe diferente
+    int indiceMao; // armazena o indice a ser comparado na mao
+    int contadorNaipe; // conta o numero de naipes iguais encontrados
+    
+    for(naipeEscolhido = 0; naipeEscolhido < NUMERO_NAIPES; naipeEscolhido++)
+    {
+        contadorNaipe = 0;
+        for(indiceMao = 1; indiceMao < TAMANHO_MAO * 2; indiceMao = indiceMao += 2)
+        {
+            if(naipeEscolhido == mao[indiceMao])
+                contadorNaipe++;
+            
+            if(contadorNaipe == 5)
+            {
+                printf("Flush achado: %s\n", naipe[naipeEscolhido]);
+                return;
+            }
+        }
+    } 
+}
 
 void imprimeCoordenadaMao(int mao[])
 {
