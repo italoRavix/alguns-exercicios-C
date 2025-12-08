@@ -23,6 +23,8 @@ void imprimeCoordenadaMao(int mao[]);
 void verificaUmaTrinca(int mao[], const char *face[]);
 void verificaQuadra(int mao[], const char *face[]);
 void verificaFlush(int mao[], const char *naipe[]);
+void verificaStraight(int mao[], const char *face[]);
+void bubbleSort(int mao[]);
 
 int main(void)
 {
@@ -43,9 +45,14 @@ int main(void)
     embaralha(baralho);
     
     distribui(baralho, naipe, face, mao);
-    int maoTeste[10] = {12, 3, 12, 3, 12, 3, 12, 3, 12, 3}; // mao inicalizada manualmente para testes
-    verificaFlush(maoTeste, naipe);
-    imprimeCoordenadaMao(maoTeste);
+    //int maoTeste[10] = {1, 2, 7, 3, 8, 0, 9, 3, 10, 1}; // mao inicalizada manualmente para testes
+    verificaUmPar(mao, face);
+    verificaDoisPares(mao, face);
+    verificaUmaTrinca(mao, face);
+    verificaQuadra(mao, face);
+    verificaFlush(mao, naipe);
+    verificaStraight(mao, face);
+    //imprimeCoordenadaMao(maoTeste);
     
 }
 
@@ -199,7 +206,7 @@ void verificaQuadra(int mao[], const char *face[])
     } 
 }
 
-//d
+//e
 // verifica se há um flush na mao
 void verificaFlush(int mao[], const char *naipe[])
 {
@@ -224,9 +231,56 @@ void verificaFlush(int mao[], const char *naipe[])
     } 
 }
 
+//f 
+// verifica se há straight na mao
+void verificaStraight(int mao[], const char *face[])
+{
+    int indiceFace1 = (TAMANHO_MAO * 2) - 4; // seleciona o penultimo indice de uma face na mao
+    int indiceFace2 = (TAMANHO_MAO * 2) - 2; // seleciona o ultimo indice de uma face na mao
+    int contadorFace = 0;
+    
+    bubbleSort(mao);
+    while(mao[indiceFace2] - mao[indiceFace1] == 1 && mao[indiceFace1] >= 0) // analisa se a difenrença entre duas faces é sempre 1, o que indica que sao sonsecutivas
+    {
+        contadorFace++;
+        indiceFace2 -= 2;
+        indiceFace1 -= 2;
+    }
+    
+    if(contadorFace == 4)
+        printf("Straight achado, iniciado em: %s\n", face[mao[0]]);
+}
+
 void imprimeCoordenadaMao(int mao[])
 {
     for(int i = 0; i < TAMANHO_MAO * 2; i = i + 2)
         printf("face: %d, naipe: %d\n", mao[i], mao[i+1]);
 }
+
+void bubbleSort(int mao[])
+{
+    int pass; // contador de passada
+    int i; // contador de comparaçao
+    int holdFace; // local temporario usado para trocar elementos do array
+    int holdNaipe;
+    
+    for(pass = 0; pass < TAMANHO_MAO * 2; pass = pass + 2)
+    {
+        for(i = 0; i < (TAMANHO_MAO * 2) - 2; i = i + 2)
+        {
+            if(mao[i] > mao[i + 2])
+            {
+                holdFace = mao[i];
+                holdNaipe = mao[i + 1];
+                
+                mao[i] = mao[i + 2];
+                mao[i + 1] = mao[i + 3];
+                
+                mao[i + 2] = holdFace;
+                mao[i + 3] = holdNaipe;
+            }
+        }
+    }
+}
+
 
