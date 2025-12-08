@@ -13,10 +13,10 @@
 // prototipos
 void embaralha(int[][13]);
 void distribui(const int baralho[][13], const char *naipe[], const char *face[], int mao[]);
-void verificaDoisPares(int mao[], const char *face[]);
 
 // prototipos para funçoes das questoes
 void verificaUmPar(int mao[], const char *face[]);
+void verificaDoisPares(int mao[], const char *face[]);
 void imprimeCoordenadaMao(int mao[]);
 void verificaUmaTrinca(int mao[], const char *face[]);
 
@@ -39,8 +39,8 @@ int main(void)
     embaralha(baralho);
     
     distribui(baralho, naipe, face, mao);
-    int maoTeste[10] = {0}; // mao inicalizada manualmente para testes
-    verificaUmaTrinca(mao, face);
+    int maoTeste[10] = {12, 1, 12, 0, 1, 3, 1, 2, 1, 1}; // mao inicalizada manualmente para testes
+    verificaDoisPares(maoTeste, face);
     imprimeCoordenadaMao(maoTeste);
     
 }
@@ -124,14 +124,16 @@ void verificaDoisPares(int mao[], const char *face[])
     int faceComparada; // armazena as faces que serao comparadas com a escolhida
     int existeUmPar = 0; // sentinela que diz se ja existe um par
     
+    int facePrimeiroPar = -1; // usado no if para impedir que uma face que ja gerou um par seja validada novamente, impede que a funçao aceite 3 faces como se fossem 2 pares
+    
     for(faceEscolhida = 0; faceEscolhida < TAMANHO_MAO * 2; faceEscolhida = faceEscolhida + 2)
     {
         for(faceComparada = faceEscolhida + 2; faceComparada < TAMANHO_MAO * 2; faceComparada = faceComparada + 2)
         {
-            if (mao[faceEscolhida] == mao[faceComparada])
+            if (mao[faceEscolhida] == mao[faceComparada] && mao[faceEscolhida] != facePrimeiroPar)
             {
                 printf("Par %d achado: %s = %s\n", existeUmPar + 1, face[mao[faceEscolhida]], face[mao[faceComparada]]);
-                
+                facePrimeiroPar = mao[faceEscolhida];
                 if(existeUmPar)
                   return;
                 
@@ -171,6 +173,6 @@ void verificaUmaTrinca(int mao[], const char *face[])
 void imprimeCoordenadaMao(int mao[])
 {
     for(int i = 0; i < TAMANHO_MAO * 2; i = i + 2)
-        printf("face: %d, naipe: %d linha\n", mao[i], mao[i+1]);
+        printf("face: %d, naipe: %d\n", mao[i], mao[i+1]);
 }
 
