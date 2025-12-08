@@ -12,6 +12,7 @@
 // prototipos
 void embaralha(int[][13]);
 void distribui(const int baralho[][13], const char *naipe[], const char *face[], int mao[]);
+void verificaDoisPares(int mao[], const char *face[]);
 
 // prototipos para funçoes da questao
 void verificaUmPar(int mao[], const char *face[]);
@@ -37,7 +38,7 @@ int main(void)
     
     distribui(baralho, naipe, face, mao);
     int maoTeste[10] = {0}; // mao inicalizada manualmente para testes
-    verificaUmPar(maoTeste, face);
+    verificaDoisPares(maoTeste, face);
     imprimeCoordenadaMao(maoTeste);
     
 }
@@ -93,6 +94,7 @@ void distribui(const int baralho[][13], const char *naipe[], const char *face[],
     }
 }
 
+// a
 // verifica se há um par na mao 
 void verificaUmPar(int mao[], const char *face[])
 {
@@ -111,6 +113,33 @@ void verificaUmPar(int mao[], const char *face[])
         }
     }
 }
+
+// b
+// verifica se há dois pares na mao 
+void verificaDoisPares(int mao[], const char *face[])
+{
+    int faceEscolhida; // armazena a face escolhida para ser comparada
+    int faceComparada; // armazena as faces que serao comparadas com a escolhida
+    int existeUmPar = 0; // sentinela que diz se ja existe um par
+    
+    for(faceEscolhida = 0; faceEscolhida < TAMANHO_MAO * 2; faceEscolhida = faceEscolhida + 2)
+    {
+        for(faceComparada = faceEscolhida + 2; faceComparada < TAMANHO_MAO * 2; faceComparada = faceComparada + 2)
+        {
+            if (mao[faceEscolhida] == mao[faceComparada])
+            {
+                printf("\nPar Achado: %s = %s\n", face[mao[faceEscolhida]], face[mao[faceComparada]]);
+                
+                if(existeUmPar)
+                  return;
+                
+                existeUmPar = 1;
+            }
+        }
+    }
+}
+
+// IDEIA PARA A QUESTAO C: USO A MESMA LOGICA DA B VENDO SE A FACE1 É IGUAL À FACE 2, SE SIM COLOCO DENTRO DO IF UM OUTRO FOR PARA TENTAR ENCONTRAR UMA TERCEIRA FACE IGUAL A FACE1
 
 void imprimeCoordenadaMao(int mao[])
 {
