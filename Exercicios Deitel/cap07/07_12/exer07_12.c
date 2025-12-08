@@ -3,6 +3,7 @@
 //
 // Minha ideia para esse exercicio consistiu em criar um array inteiro mao com 10 inteiros e armazenar nele
 // as faces (indices pares) e naipes (indices impares) das 5 primeiras cartas sorteadas que representam uma mão.
+// Como exemplo, a carta 'Rei de Copas' seria armazenada no array assim: um inteiro 12 no indice i e um inteiro 0 no indice i+1.
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,9 +15,10 @@ void embaralha(int[][13]);
 void distribui(const int baralho[][13], const char *naipe[], const char *face[], int mao[]);
 void verificaDoisPares(int mao[], const char *face[]);
 
-// prototipos para funçoes da questao
+// prototipos para funçoes das questoes
 void verificaUmPar(int mao[], const char *face[]);
 void imprimeCoordenadaMao(int mao[]);
+void verificaUmaTrinca(int mao[], const char *face[]);
 
 int main(void)
 {
@@ -38,7 +40,7 @@ int main(void)
     
     distribui(baralho, naipe, face, mao);
     int maoTeste[10] = {0}; // mao inicalizada manualmente para testes
-    verificaDoisPares(maoTeste, face);
+    verificaUmaTrinca(mao, face);
     imprimeCoordenadaMao(maoTeste);
     
 }
@@ -85,9 +87,9 @@ void distribui(const int baralho[][13], const char *naipe[], const char *face[],
                 {
                     printf("%s de %s %c", face[coluna], naipe[linha], '\n');
                     
-                    mao[(carta - 1) * 2] = coluna; //armazena a coordenada da coluna nos indices pares
-                    mao[carta * 2 - 1] = linha; // armazena a coordenada da linha nos indices impares 
-                    
+                    // as duas instruçoes a seguir foram adicionas para solucionar os exercicios
+                    mao[(carta - 1) * 2] = coluna; //armazena a coordenada da coluna nos indices pares (faces)
+                    mao[carta * 2 - 1] = linha; // armazena a coordenada da linha nos indices impares (naipes)
                 }    
             }
         }   
@@ -107,7 +109,7 @@ void verificaUmPar(int mao[], const char *face[])
         {
             if (mao[faceEscolhida] == mao[faceComparada])
             {
-                printf("\nPar Achado: %s = %s\n", face[mao[faceEscolhida]], face[mao[faceComparada]]);
+                printf("\nPar achado: %s = %s\n", face[mao[faceEscolhida]], face[mao[faceComparada]]);
                 return;
             }
         }
@@ -128,7 +130,7 @@ void verificaDoisPares(int mao[], const char *face[])
         {
             if (mao[faceEscolhida] == mao[faceComparada])
             {
-                printf("\nPar Achado: %s = %s\n", face[mao[faceEscolhida]], face[mao[faceComparada]]);
+                printf("Par %d achado: %s = %s\n", existeUmPar + 1, face[mao[faceEscolhida]], face[mao[faceComparada]]);
                 
                 if(existeUmPar)
                   return;
@@ -139,7 +141,32 @@ void verificaDoisPares(int mao[], const char *face[])
     }
 }
 
-// IDEIA PARA A QUESTAO C: USO A MESMA LOGICA DA B VENDO SE A FACE1 É IGUAL À FACE 2, SE SIM COLOCO DENTRO DO IF UM OUTRO FOR PARA TENTAR ENCONTRAR UMA TERCEIRA FACE IGUAL A FACE1
+// c
+// verifica se há uma trinca na mao 
+void verificaUmaTrinca(int mao[], const char *face[])
+{
+    int faceEscolhida; // armazena a face escolhida para ser comparada
+    int faceComparada; // armazena as faces que serao comparadas com a escolhida
+    int faceComparada2; // armazena as faces que serao comparadas apos achar um par
+    
+    for(faceEscolhida = 0; faceEscolhida < TAMANHO_MAO * 2; faceEscolhida = faceEscolhida + 2)
+    {
+        for(faceComparada = faceEscolhida + 2; faceComparada < TAMANHO_MAO * 2; faceComparada = faceComparada + 2)
+        {
+            if (mao[faceEscolhida] == mao[faceComparada])
+            {
+                for(int faceComparada2 = faceComparada + 2; faceComparada2 < TAMANHO_MAO * 2; faceComparada2 = faceComparada2 + 2)
+                {
+                    if(mao[faceEscolhida] == mao[faceComparada2])
+                    {
+                        printf("Trinca achada: %s = %s = %s\n", face[mao[faceEscolhida]], face[mao[faceComparada]], face[mao[faceComparada2]]);   
+                        return;
+                    }
+                }
+            }
+        }
+    }
+}
 
 void imprimeCoordenadaMao(int mao[])
 {
