@@ -42,7 +42,7 @@ void imprimeCoordenadaMao(int mao[]);
 void bubbleSort(int mao[]);
 
 // prototipos para funçoes das questoes
-void printMao(int mao[], const char *face[], const char *naipe[]);
+void printTipoMao(int mao[], const char *face[], const char *naipe[]);
 void distribuiDuasPessoas(const int baralho[][NUMERO_FACES], const char *naipe[], const char *face[], int mao1[], int mao2[]);
 
 int main(void)
@@ -64,16 +64,10 @@ int main(void)
     
     embaralha(baralho);
     
-    //distribui(baralho, naipe, face, mao1);  
-    //printf("\n");
-    //distribui2(baralho, naipe, face, mao2);
-    //printf("\n");
-    //imprimeCoordenadaMao(mao2);
-    
     distribuiDuasPessoas(baralho, naipe, face, mao1, mao2);
     
-    printMao(mao1, face, naipe);
-    printMao(mao2, face, naipe);
+    printTipoMao(mao1, face, naipe);
+    printTipoMao(mao2, face, naipe);
     
 }
 
@@ -338,7 +332,7 @@ void bubbleSort(int mao[])
 }
 
 // imprime o tipo de mao de um jogador
-void printMao(int mao[], const char *face[], const char *naipe[])
+void printTipoMao(int mao[], const char *face[], const char *naipe[])
 {   
     if(verificaStraight(mao, face))
     {
