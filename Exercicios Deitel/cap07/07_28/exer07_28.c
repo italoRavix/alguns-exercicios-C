@@ -5,6 +5,8 @@
 
 // pre configuraçoes
 #define MEMORY_SIZE 100
+#define MEMORY_VALUE_MAX 9999
+#define MEMORY_VALUE_MIN -9999
 #define SENTINELA -99999
 
 // codigos de operaçao
@@ -40,9 +42,10 @@ void simpletron()
     int operand = 0; // armazena os dois digitos da direita de uma palavra de instruçao
     int instructionRegister = 0; // armazena a proxima instruçao a ser executada da memoria
     
-    // logica do while
+    // logica while
     int instruction = 0; // armazena as instrucoes que serao de entrada
     int numInstructions = 0; // armazena o numero de instruçoes de entrada
+    int sentinelaExecucao = 0; // verifica se a execuçao deve ou nao continuar    
     
     printf("*** Bem vindo ao Simpletron! ***\n");
     printf("*** Favor digitar seu programa, uma instrução  ***\n");
@@ -58,18 +61,22 @@ void simpletron()
         printf("%02d ? ", numInstructions);
         scanf("%d", &instruction);
         
-        if(instruction != SENTINELA)
+        if(instruction != SENTINELA && instruction => MEMORY_VALUE_MIN && instruction <= MEMORY_VALUE_MAX)
         {
             memory[numInstructions] = instruction;
             numInstructions++;
-        }    
+        }
+        else if(instruction <= MEMORY_VALUE_MIN || instruction > =MEMORY_VALUE_MAX)
+        {
+        //    COLOCAR LOGICA AQUI
+        }
     }
     
     printf("*** Carga do programa concluída ***\n");
     printf("*** Iniciando execução do programa ***\n");    
     
     // começa a execução
-    for(int instructionCounter = 0; instructionCounter < numInstructions; instructionCounter++)
+    while(sentinelaExecucao != SENTINELA)
     {
         // atualiza os registradores
         instructionRegister = memory[instructionCounter];
@@ -84,6 +91,7 @@ void simpletron()
         printf("operationCode               %02d\n", operationCode);    
         printf("operand                     %02d\n\n", operand);  
         
+        instructionCounter++;        
         // seleciona a operaçao
         switch(operationCode)
         {
@@ -120,16 +128,18 @@ void simpletron()
                 accumulator *= memory[operand];
                 break;  
 
-            case BRANCH:
-                printf("BRANCH\n");
+            case BRANCH:     
+                instructionCounter = operand;
                 break;
                 
             case BRANCHNEG:
-                printf("BRANCHNEG\n");
-                break;  
+                if(accumulator < 0)
+                    instructionCounter = operand;
+                break;
                 
             case BRANCHZERO:
-                printf("BRANCHZERO\n");
+                if(accumulator == 0)
+                    instructionCounter = operand;
                 break;
                 
             case HALT:
@@ -147,9 +157,8 @@ void simpletron()
                 }
                 
                 printf("\n\n");
-
+                sentinelaExecucao = SENTINELA;
                 break;  
-                
         }
         
     }
