@@ -1,5 +1,7 @@
-//
-//
+// Exercicio 07_28
+// Implementa um computador de arquitetura simples chamada Simpletron. O computador tem um unico registrador de uso geral, o acumulador. 
+// Na configuração atual seu armazenamento tem espaço para 100 dados/instruçoes de quatro digitos decimais. 
+// Há implementação de algumas verificações simples em tempo execução: Divisão por zero, overflow/underflow aritmético e codigos de operação inválidos.
 
 #include <stdio.h>
 
@@ -22,6 +24,9 @@
 #define BRANCHNEG 41
 #define BRANCHZERO 42
 #define HALT 43
+
+// codigo para erros em tempo de execuçao
+#define ERROR -99999
 
 void simpletron();
 
@@ -61,14 +66,14 @@ void simpletron()
         printf("%02d ? ", numInstructions);
         scanf("%d", &instruction);
         
-        if(instruction != SENTINELA && instruction => MEMORY_VALUE_MIN && instruction <= MEMORY_VALUE_MAX)
+        if(instruction != SENTINELA && instruction >= MEMORY_VALUE_MIN && instruction <= MEMORY_VALUE_MAX)
         {
             memory[numInstructions] = instruction;
             numInstructions++;
         }
-        else if(instruction <= MEMORY_VALUE_MIN || instruction > =MEMORY_VALUE_MAX)
+        else if(instruction <= MEMORY_VALUE_MIN || instruction >= MEMORY_VALUE_MAX)
         {
-        //    COLOCAR LOGICA AQUI
+            printf("Insira um valor válido. Intervalo [%d, %d]\n", MEMORY_VALUE_MIN, MEMORY_VALUE_MAX);
         }
     }
     
@@ -78,10 +83,15 @@ void simpletron()
     // começa a execução
     while(sentinelaExecucao != SENTINELA)
     {
-        // atualiza os registradores
-        instructionRegister = memory[instructionCounter];
-        operationCode = instructionRegister / 100;
-        operand = instructionRegister % 100;
+        
+        // avalia se ha erro em tempo de execuçao
+        if(operationCode != ERROR)
+        {
+            // atualiza os registradores        
+            instructionRegister = memory[instructionCounter];
+            operationCode = instructionRegister / 100;
+            operand = instructionRegister % 100;
+        
         
         // imprime o estado atual
         printf("\nREGISTERS:\n");
@@ -90,6 +100,8 @@ void simpletron()
         printf("instructionRegister       %04d\n", instructionRegister);    
         printf("operationCode               %02d\n", operationCode);    
         printf("operand                     %02d\n\n", operand);  
+        
+        }
         
         instructionCounter++;        
         // seleciona a operaçao
@@ -100,7 +112,7 @@ void simpletron()
                 scanf("%d", &memory[operand]);
                 break;
                 
-            case  WRITE:
+            case WRITE:
                 printf("OUTPUT: %d\n", memory[operand]);
                 break;  
                 
@@ -114,18 +126,63 @@ void simpletron()
 
             case ADD:
                 accumulator += memory[operand];
+                
+                // avalia overflow e underflow aritmetico
+                if(accumulator > MEMORY_VALUE_MAX || accumulator < MEMORY_VALUE_MIN)
+                {
+                    printf("*** Overflow/Underflow aritmético ***\n");
+                    operationCode = ERROR;
+                    break;
+                }
+                
                 break;
                 
             case SUBTRACT:
                 accumulator -= memory[operand];
+                
+                // avalia overflow e underflow aritmetico                
+                if(accumulator > MEMORY_VALUE_MAX || accumulator < MEMORY_VALUE_MIN)
+                {
+                    printf("*** Overflow/Underflow aritmético ***\n");
+                    operationCode = ERROR;
+                    break;
+                }
+                
                 break;  
                 
             case DIVIDE:
+            
+                // avalia divisao por zero
+                if(memory[operand] == 0)
+                {
+                    printf("*** Tentativa de divisão por zero ***\n");
+                    operationCode = ERROR;
+                    break;
+                }
+                       
                 accumulator /= memory[operand];
+                
+                // avalia overflow e underflow aritmetico                
+                if(accumulator > MEMORY_VALUE_MAX || accumulator < MEMORY_VALUE_MIN)
+                {
+                    printf("*** Overflow/Underflow aritmético ***\n");
+                    operationCode = ERROR;
+                    break;
+                }
+                
                 break;
                 
             case MULTIPLY:
                 accumulator *= memory[operand];
+                
+                // avalia overflow e underflow aritmetico                
+                if(accumulator > MEMORY_VALUE_MAX || accumulator < MEMORY_VALUE_MIN)
+                {
+                    printf("*** Overflow/Underflow aritmético ***\n");
+                    operationCode = ERROR;
+                    break;
+                }
+                
                 break;  
 
             case BRANCH:     
@@ -159,6 +216,28 @@ void simpletron()
                 printf("\n\n");
                 sentinelaExecucao = SENTINELA;
                 break;  
+                
+            case ERROR:
+                printf("*** Execução do Simpletron encerrada de forma anormal ***\n\n");
+                
+                printf("MEMORY:\n\n");
+                printf("     %4d  %4d  %4d  %4d  %4d  %4d  %4d  %4d  %4d  %4d\n", 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+                
+                for(int i = 0; i < MEMORY_SIZE; i++)
+                {
+                    if(i % 10 == 0)
+                        printf("\n%3d  ", i);
+                        
+                    printf("%04d  ", memory[i]);
+                }
+                
+                printf("\n\n");
+                sentinelaExecucao = SENTINELA;
+                break;    
+                
+            default:
+                operationCode = ERROR;
+                printf("*** Código de operação inválido ***\n");
         }
         
     }
