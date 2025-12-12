@@ -1,3 +1,4 @@
 # alguns-exercicios-C
 Implementação para fins de estudo de alguns exercicios do livro "C Como Programar" de Paul Deitel e Harvey Deitel 6ª edição.  
-Fique a vontade para ajudar a corrigir, questionar e opinar sobre minha soluções.
+Fique a vontade para ajudar a corrigir, questionar e opinar sobre minha soluções.  
+Exercicios compilados pelo GCC em um Ubuntu 24.04.4 LTS x86.
