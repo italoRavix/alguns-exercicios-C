@@ -32,7 +32,8 @@ int main(void)
         printf("\nDigite uma escolha:\n0  Imprime o array de notas\n1  Acha a menor nota\n2  Acha a maior nota\n3  Imprime a média de todos os testes para cada aluno\n4  Encerra o programa\n");
         scanf("%d", &choose);
         
-    while(choose >=0 && choose < 4){
+    while(choose >=0 && choose < 4)
+    {
         (*processGrades[choose])(studentGrades, STUDENTS, EXAMS);
         printf("\nDigite uma escolha:\n0  Imprime o array de notas\n1  Acha a menor nota\n2  Acha a maior nota\n3  Imprime a média de todos os testes para cada aluno\n4  Encerra o programa\n");
         scanf("%d", &choose);
