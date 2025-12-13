@@ -1,0 +1,9 @@
+Já implementadas:
+a) Sim
+b) Sim
+c) Sim (para expoentes inteiros positivos)
+d) Não
+e) Não
+f) Não
+g) Não
+h) Não
