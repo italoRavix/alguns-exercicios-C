@@ -1,5 +1,9 @@
+// Exercicio 07_30
+// Um menu interativo com o usuário que faz o cálculo da circunferencia de um circulo, calculo da área de um circulo ou calculo do volume
+// de uma esfera. Utiliza o raio que o usuário fornecer para fazer o calculo selecionado.
 //
-//
+// Para implementação foi utilizado um array de ponteiros para funçoes. O usuario escolhe uma opção, que é um numero inteiro, e essa opção
+// é utilizada para selecionar o indice do array que armazena o ponteiro para a função.
 
 #include <stdio.h>
 #include <math.h>
@@ -11,7 +15,6 @@ void inputChoose(int * const choosePtr);
 void inputRadius(double * const radiusPtr);
 
 // prototipo de funçoes de tratamento de dados
-
 double circleCircumference(const double radius);
 double sphereVolume(const double radius);
 double circleArea(const double radius);
@@ -35,7 +38,7 @@ void calculate()
 {
     double (*processRadius[])(const double radius) = {circleCircumference, circleArea, sphereVolume};
     
-    int choose = MENU;
+    int choose = MENU; // armazena a escolha do usuario
     double radius;
     
     printf("\n\n*** CALCULOS BASEADOS NO RAIO ***\n");    
