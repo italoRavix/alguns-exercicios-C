@@ -4,10 +4,14 @@
 
 #define INT_BITS CHAR_BIT * sizeof(int) // define o tamanho em bits de um inteiro
 #define CHAR_BITS CHAR_BIT * sizeof(char)
+#define SHORT_BITS CHAR_BIT * sizeof(short)
 
 #define NONE 0
 #define TYPE_INT 1
 #define TYPE_CHAR 2
+#define TYPE_SHORT 3
+#define TYPE_U_INT 4
+#define TYPE_U_SHORT 5
 
 void displayBits(int x, unsigned type);
 unsigned decideSize(unsigned type);
@@ -25,7 +29,28 @@ void displayBits(int x, unsigned type)
         // declara displayMask
         int displayMask = 1 << size - 1;
         
-        printf("%10d: ", x);
+        // avalia se type é unsigned ou nao, necessario para impressao correta da formataçao de printf()
+        switch(type)
+        {
+            case TYPE_U_INT:
+                printf("%10u: ", x);
+                break;
+                
+            case TYPE_CHAR:
+                printf("%6u (%c): ", x, x);
+                break;                
+            
+            case TYPE_U_SHORT:
+                printf("%10hu: ", x);
+                break;
+                
+            case TYPE_SHORT:
+                printf("%10hd: ", x);
+                break;                
+
+            default:
+                printf("%10d: ", x);
+        }
         
         // percorre os bits
         for(c = 1; c <= size; c++)
@@ -51,10 +76,15 @@ unsigned decideSize(unsigned type)
     switch(type)
     {
         case TYPE_INT:
+        case TYPE_U_INT:        
             return INT_BITS;
             
         case TYPE_CHAR:
             return CHAR_BITS;
+            
+        case TYPE_SHORT:
+        case TYPE_U_SHORT:        
+            return SHORT_BITS;
             
         default:
             return NONE; 
