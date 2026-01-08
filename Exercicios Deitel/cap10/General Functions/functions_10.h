@@ -2,10 +2,12 @@
 #include <stdio.h>
 #include <limits.h>
 
+// definem os tamanhos em bits de cada tipo
 #define INT_BITS CHAR_BIT * sizeof(int) // define o tamanho em bits de um inteiro
 #define CHAR_BITS CHAR_BIT * sizeof(char)
 #define SHORT_BITS CHAR_BIT * sizeof(short)
 
+// definiçoes de controle
 #define NONE 0
 #define TYPE_INT 1
 #define TYPE_CHAR 2
@@ -13,8 +15,10 @@
 #define TYPE_U_INT 4
 #define TYPE_U_SHORT 5
 
-void displayBits(int x, unsigned type);
-unsigned decideSize(unsigned type);
+// prototipos
+void displayBits(int, unsigned);
+unsigned decideSize(unsigned);
+unsigned short compactCharacters(char, char);
 
 // exibe os bits de um inteiro
 void displayBits(int x, unsigned type)
@@ -90,3 +94,27 @@ unsigned decideSize(unsigned type)
             return NONE; 
     }
 }
+
+// compacta os dois caracteres em um
+unsigned short packCharacters(char c1, char c2)
+{
+    unsigned short compact = c1;
+    
+    compact <<= 8;
+    
+    return compact | c2;
+}
+
+// desconpacta dois caracteres de uma variavel short e atribui a um array, depopis devolve o array 
+char *unpackCharacters(unsigned short packedChars, char *unpackedChars)
+{
+
+    short mask1 = 65280; // define 11111111 00000000 como mascara
+    short mask2 = 255; // define 00000000 11111111 como mascara
+    
+    unpackedChars[0] = (mask1 & packedChars) >> 8; 
+    unpackedChars[1] = (mask2 & packedChars);    
+    
+    return unpackedChars;
+}
+

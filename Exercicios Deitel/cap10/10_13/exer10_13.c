@@ -9,7 +9,7 @@
 #include "../General Functions/functions_10.h"
 
 // prototipos
-unsigned short compactCharacters(char, char);
+// unsigned short compactCharacters(char, char);
 
 int main(void)
 {
@@ -21,18 +21,8 @@ int main(void)
     displayBits(c1, TYPE_CHAR);
     displayBits(c2, TYPE_CHAR);    
     
-    displayBits(compactCharacters(c1, c2), TYPE_U_SHORT);    
+    displayBits(packCharacters(c1, c2), TYPE_U_SHORT);    
     
     return 0;
 }
 
-
-// compacta os dois caracteres em um
-unsigned short compactCharacters(char c1, char c2)
-{
-    unsigned short compact = c1;
-    
-    compact <<= 8;
-    
-    return compact | c2;
-}
