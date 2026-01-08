@@ -11,11 +11,11 @@ int main(void)
     int x = 423454;
     
     printf("Valor inicial\n");
-    displayBitsInt(x, TYPE_INT);
+    displayBits(x, TYPE_INT);
     
     x >>= 1;
     
     printf("Valor apos deslocamento à direita\n");
-    displayBitsInt(x, TYPE_INT);
+    displayBits(x, TYPE_INT);
 }
 

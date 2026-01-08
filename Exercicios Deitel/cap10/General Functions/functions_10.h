@@ -9,11 +9,11 @@
 #define TYPE_INT 1
 #define TYPE_CHAR 2
 
-void displayBitsInt(int x, unsigned type);
+void displayBits(int x, unsigned type);
 unsigned decideSize(unsigned type);
 
 // exibe os bits de um inteiro
-void displayBitsInt(int x, unsigned type)
+void displayBits(int x, unsigned type)
 {
 
     unsigned size = decideSize(type);
@@ -44,6 +44,8 @@ void displayBitsInt(int x, unsigned type)
     printf("Tipo de dado invalido ou ainda não definido.\n");
 }
 
+
+// Decide quantos bits usar em displayBits
 unsigned decideSize(unsigned type)
 {
     switch(type)

@@ -12,11 +12,11 @@ int main(void)
     unsigned pot = 5;
     
     printf("Variavel x antes de receber o valor de power (%d)\n", pot);
-    displayBitsInt(x, TYPE_INT);
+    displayBits(x, TYPE_INT);
     
     x = power2(x, pot);
     printf("\nVariavel x aṕos de receber o valor de power (%d)\n", pot);    
-    displayBitsInt(x, TYPE_INT);
+    displayBits(x, TYPE_INT);
     
     return 0;
 }
