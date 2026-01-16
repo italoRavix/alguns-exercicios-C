@@ -17,11 +17,9 @@ struct
     
 } typedef HealthProfile;
 
-void removeNewLine(char* string);
-
 int main(void)
 {
-    HealthProfile italo = {"Italo", "Tadewisk", 'M', {SEPTEMBER, 8, 2002}, 1.80, 70.0,};
+    HealthProfile italo;
     
     printf("Insira os dados do paciente\n");
     
