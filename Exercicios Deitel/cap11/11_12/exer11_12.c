@@ -3,13 +3,15 @@
 // O sistema adiciona, remove, atualiza e exibe os itens do arquivo.
 
 #include <stdio.h>
+#include <string.h>
 #define NUM_RECORDS 100
+#define SIZE_NAME 20
 
 // representa uma estrutura
 struct tool
 {
     unsigned id;
-    char name[20];
+    char name[SIZE_NAME];
     unsigned amount;
     double price;
 } typedef Tool;
@@ -21,6 +23,7 @@ void insert(FILE *);
 void delete(FILE *);   
 void update(FILE *);
 int enterChoice(void);
+void cleanBuffer(void);
 
 int main(void)
 {
@@ -81,12 +84,7 @@ FILE *inicialize(FILE *fPtr)
     }
     
     else
-    {
         printf("Arquivo ja inicilizado antes.\n");
-        
-        // for(int i = 0; i < NUM_RECORDS; i++)
-        //     fwrite(&tool, sizeof(Tool), 1, fPtr);
-    }
     
     return fPtr;
 }
@@ -116,8 +114,13 @@ void insert(FILE *fPtr)
     }
 
     tool.id = c;
-    printf("Insira o nome do produto, quantidade e valor: ");
-    scanf("%s%u%lf", tool.name, &tool.amount, &tool.price);    
+    printf("Insira o nome do produto: ");
+    cleanBuffer();
+    fgets(tool.name, SIZE_NAME, stdin);
+    tool.name[strcspn(tool.name, "\n")] = '\0'; // remove o '\n' lido por fgets
+    
+    printf("Insira quantidade e valor: ");    
+    scanf("%u%lf", &tool.amount, &tool.price);    
     
     fseek(fPtr, (tool.id - 1) * sizeof(Tool), SEEK_SET); // coloca o ponteiro no lugar certo para escrita    
     fwrite(&tool, sizeof(Tool), 1, fPtr);
@@ -162,14 +165,19 @@ void update(FILE *fPtr)
         return;
     }
     
-    printf("Qual informaçao atualizar? \n[1] Nome\n[2] Quantidade\n[3] Preco\n[4] Tudo\n");
+    printf("Qual informaçao atualizar? \n[1] Nome\n[2] Quantidade\n[3] Preco\n[4] Tudo\n[-1] Cancelar\n");
     scanf("%u", &choose);
+    
+    if(choose == -1)
+        return;
     
     switch(choose)
     {
         case NAME:
             printf("Novo nome: ");
-            scanf("%s", tool.name);
+            cleanBuffer();
+            fgets(tool.name, SIZE_NAME, stdin);
+            tool.name[strcspn(tool.name, "\n")] = '\0'; // remove o '\n' lido por fgets            
             break;
             
         case AMOUNT:
@@ -178,13 +186,18 @@ void update(FILE *fPtr)
             break;  
             
         case PRICE:
-            printf("Novo preço: ");
+            printf("Novo valor: ");
             scanf("%lf", &tool.price);
             break;  
             
         case ALL:
-            printf("Novos dados: ");
-            scanf("%s%u%lf", tool.name, &tool.amount, &tool.price);   
+            printf("Novo nome: ");
+            cleanBuffer();
+            fgets(tool.name, SIZE_NAME, stdin);
+            tool.name[strcspn(tool.name, "\n")] = '\0'; // remove o '\n' lido por fgets
+            
+            printf("Nova quantidade e valor: ");    
+            scanf("%u%lf", &tool.amount, &tool.price);
             break;
     }
 
@@ -225,4 +238,11 @@ int enterChoice(void)
     
     scanf("%d", &menuChoice);
     return menuChoice;
+}
+
+// permite que fgets funciona de forma apropriada apos o uso de scanf
+void cleanBuffer(void)
+{
+    char c;
+    while((c = getchar()) != '\n' && c != EOF);
 }
