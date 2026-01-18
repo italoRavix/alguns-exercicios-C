@@ -58,6 +58,7 @@ int main(void)
     }
     
     printf("Programa encerrado\n");
+    fclose(fPtr);
     
     return 0;
 }
